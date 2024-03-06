@@ -1,9 +1,138 @@
-# This file should ensure the existence of records required to run the application in every environment (production,
-# development, test). The code here should be idempotent so that it can be executed at any point in every environment.
-# The data can then be loaded with the bin/rails db:seed command (or created alongside the database with db:setup).
-#
-# Example:
-#
-#   ["Action", "Comedy", "Drama", "Horror"].each do |genre_name|
-#     MovieGenre.find_or_create_by!(name: genre_name)
-#   end
+require 'faker'
+
+puts ''
+puts 'Cleaning database...'
+
+# AbTest.destroy_all
+# Variation.destroy_all
+Article.destroy_all
+Category.destroy_all
+Editor.destroy_all
+
+puts 'Swept and cleansed!'
+puts ''
+puts ''
+
+###################################
+#                                 #
+#                                 #
+#           CATEGORIES            #
+#                                 #
+#                                 #
+###################################
+
+puts 'Creating categories...'
+puts '..........................'
+
+image = Category.create!(name: 'Image')
+video = Category.create!(name: 'Video')
+text = Category.create!(name: 'Text')
+book_list = Category.create!(name: 'Book list')
+quote = Category.create!(name: 'Quote')
+news = Category.create!(name: 'News')
+summary = Category.create!(name: 'Summary')
+guide = Category.create!(name: 'Guide')
+
+puts "#{Category.count} categories created."
+
+###################################
+#                                 #
+#                                 #
+#              EDITORS            #
+#                                 #
+#                                 #
+###################################
+
+puts 'Creating editors...'
+puts '..........................'
+
+kate = Editor.create!(name: 'Kate Moon')
+paul = Editor.create!(name: 'Paul Star')
+ed = Editor.create!(name: 'Ed Sun')
+joyce = Editor.create!(name: 'Joyce Sky')
+
+puts "#{Editor.count} editors created."
+
+# ###################################
+# #                                 #
+# #                                 #
+# #             ARTICLES            #
+# #                                 #
+# #                                 #
+# ###################################
+
+puts 'Creating articles...'
+puts '..........................'
+
+15.times do
+  article = Article.new(
+    title: Faker::Movies::HarryPotter.quote,
+    content: Faker::HTML.element(
+      tag: 'div',
+      content: 'This is a div with XSS attributes.',
+      attributes: { class: 'xss', onclick: "alert('XSS')" }
+    ),
+    editor: Editor.all.sample,
+    category: Category.all.sample
+  )
+  article.save!
+end
+
+puts "#{Article.count} articles created."
+
+# # ###################################
+# # #                                 #
+# # #                                 #
+# # #            VARIATIONS           #
+# # #                                 #
+# # #                                 #
+# # ###################################
+
+# puts 'Creating Variations...'
+# puts '..........................'
+
+# 8.times do
+#   variation = Variation.new(
+#     category: Category.all.sample,
+#     content: Faker::HTML.element(
+#       tag: 'div',
+#       content: 'This is a div with XSS attributes.',
+#       attributes: { class: 'xss', onclick: "alert('XSS')" }
+#     )
+#   )
+#   variation.save!
+# end
+
+# puts "#{Variation.count} variations created."
+
+# ###################################
+# #                                 #
+# #                                 #
+# #             AB TESTS            #
+# #                                 #
+# #                                 #
+# ###################################
+
+# puts 'Creating A/B tests...'
+# puts '..........................'
+
+# 5.times do
+#   article = Article.all.sample
+#   editor = article.editor
+#   control_variation = Variation.all.sample
+#   test_variation = Variation.where.not(id: control_variation.id).sample
+#   AbTest.create!(
+#     article: article,
+#     editor: editor,
+#     control_variation: control_variation,
+#     test_variation: test_variation,
+#     start_date: Date.today + rand(1..6),
+#     end_date: Date.today + rand(6..35)
+#   )
+# end
+
+# puts "#{AbTest.count} A/B tests created."
+puts ''
+puts ''
+puts 'Finished generating a nice seed!'
+puts ''
