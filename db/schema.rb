@@ -10,7 +10,22 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_06_180949) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_06_192827) do
+  create_table "ab_tests", force: :cascade do |t|
+    t.integer "article_id", null: false
+    t.integer "editor_id", null: false
+    t.integer "control_variation_id", null: false
+    t.integer "test_variation_id", null: false
+    t.date "start_date"
+    t.date "end_date"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["article_id"], name: "index_ab_tests_on_article_id"
+    t.index ["control_variation_id"], name: "index_ab_tests_on_control_variation_id"
+    t.index ["editor_id"], name: "index_ab_tests_on_editor_id"
+    t.index ["test_variation_id"], name: "index_ab_tests_on_test_variation_id"
+  end
+
   create_table "articles", force: :cascade do |t|
     t.string "title"
     t.text "content"
@@ -34,6 +49,19 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_06_180949) do
     t.datetime "updated_at", null: false
   end
 
+  create_table "variations", force: :cascade do |t|
+    t.integer "category_id", null: false
+    t.text "content"
+    t.datetime "created_at", null: false
+    t.datetime "updated_at", null: false
+    t.index ["category_id"], name: "index_variations_on_category_id"
+  end
+
+  add_foreign_key "ab_tests", "articles"
+  add_foreign_key "ab_tests", "editors"
+  add_foreign_key "ab_tests", "variations", column: "control_variation_id"
+  add_foreign_key "ab_tests", "variations", column: "test_variation_id"
   add_foreign_key "articles", "categories"
   add_foreign_key "articles", "editors"
+  add_foreign_key "variations", "categories"
 end

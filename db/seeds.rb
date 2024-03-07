@@ -3,9 +3,9 @@ require 'faker'
 puts ''
 puts 'Cleaning database...'
 
-# AbTest.destroy_all
-# Variation.destroy_all
+AbTest.destroy_all
 Article.destroy_all
+Variation.destroy_all
 Category.destroy_all
 Editor.destroy_all
 
@@ -80,58 +80,58 @@ end
 
 puts "#{Article.count} articles created."
 
-# # ###################################
-# # #                                 #
-# # #                                 #
-# # #            VARIATIONS           #
-# # #                                 #
-# # #                                 #
-# # ###################################
+###################################
+#                                 #
+#                                 #
+#            VARIATIONS           #
+#                                 #
+#                                 #
+###################################
 
-# puts 'Creating Variations...'
-# puts '..........................'
+puts 'Creating Variations...'
+puts '..........................'
 
-# 8.times do
-#   variation = Variation.new(
-#     category: Category.all.sample,
-#     content: Faker::HTML.element(
-#       tag: 'div',
-#       content: 'This is a div with XSS attributes.',
-#       attributes: { class: 'xss', onclick: "alert('XSS')" }
-#     )
-#   )
-#   variation.save!
-# end
+8.times do
+  variation = Variation.new(
+    category: Category.all.sample,
+    content: Faker::HTML.element(
+      tag: 'div',
+      content: 'This is a div with XSS attributes.',
+      attributes: { class: 'xss', onclick: "alert('XSS')" }
+    )
+  )
+  variation.save!
+end
 
-# puts "#{Variation.count} variations created."
+puts "#{Variation.count} variations created."
 
-# ###################################
-# #                                 #
-# #                                 #
-# #             AB TESTS            #
-# #                                 #
-# #                                 #
-# ###################################
+###################################
+#                                 #
+#                                 #
+#             AB TESTS            #
+#                                 #
+#                                 #
+###################################
 
-# puts 'Creating A/B tests...'
-# puts '..........................'
+puts 'Creating A/B tests...'
+puts '..........................'
 
-# 5.times do
-#   article = Article.all.sample
-#   editor = article.editor
-#   control_variation = Variation.all.sample
-#   test_variation = Variation.where.not(id: control_variation.id).sample
-#   AbTest.create!(
-#     article: article,
-#     editor: editor,
-#     control_variation: control_variation,
-#     test_variation: test_variation,
-#     start_date: Date.today + rand(1..6),
-#     end_date: Date.today + rand(6..35)
-#   )
-# end
+50.times do
+  article = Article.all.sample
+  editor = article.editor
+  control_variation = Variation.all.sample
+  test_variation = Variation.where.not(id: control_variation.id).sample
+  AbTest.create!(
+    article: article,
+    editor: editor,
+    control_variation: control_variation,
+    test_variation: test_variation,
+    start_date: Date.today + rand(1..6),
+    end_date: Date.today + rand(6..35)
+  )
+end
 
-# puts "#{AbTest.count} A/B tests created."
+puts "#{AbTest.count} A/B tests created."
 puts ''
 puts ''
 puts 'Finished generating a nice seed!'

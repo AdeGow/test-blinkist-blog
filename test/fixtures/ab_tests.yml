@@ -1,0 +1,17 @@
+# Read about fixtures at https://api.rubyonrails.org/classes/ActiveRecord/FixtureSet.html
+
+one:
+  article: one
+  editor: one
+  control_variation: one
+  test_variation: one
+  start_date: 2024-03-06
+  end_date: 2024-03-06
+
+two:
+  article: two
+  editor: two
+  control_variation: two
+  test_variation: two
+  start_date: 2024-03-06
+  end_date: 2024-03-06
