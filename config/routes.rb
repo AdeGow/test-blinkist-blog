@@ -4,10 +4,13 @@ Rails.application.routes.draw do
       root 'pages#landing'
 
       resources :articles, only: [:index, :show] do
-        resources :ab_tests, only: [:index, :show] do
+        resources :ab_tests, only: [:index, :show, :new, :create] do
           resources :variations, only: [:index, :show_control_variation, :show_test_variation]
         end
       end
+
+      get '/articles/:article_id/ab-tests/new', to: 'ab_tests#new', as: 'new_ab_test'
+      post '/articles/:article_id/ab-tests', to: 'ab_tests#create'
 
       get '/articles/:article_id/ab-tests', to: 'ab_tests#index', as: 'ab_tests'
       get '/articles/:article_id/ab-tests/:id', to: 'ab_tests#show', as: 'ab_test'
