@@ -3,21 +3,28 @@ Rails.application.routes.draw do
     namespace :v1 do
       root 'pages#landing'
 
-      resources :articles, only: [:index, :show] do
-        resources :ab_tests, only: [:index, :show, :new, :create] do
-          resources :variations, only: [:index, :show_control_variation, :show_test_variation]
+      # Magazine routes
+      scope '/magazine' do
+        resources :articles, only: [:index, :show]
+      end
+
+      scope '/editors-dashboard' do
+        resources :articles, only: [:index, :show] do
+          resources :ab_tests, only: [:index, :show, :new, :create] do
+            resources :variations, only: [:index, :show_control_variation, :show_test_variation]
+          end
         end
       end
 
       get '/articles/:article_id/ab-tests/new', to: 'ab_tests#new', as: 'new_ab_test'
       post '/articles/:article_id/ab-tests', to: 'ab_tests#create'
 
-      get '/articles/:article_id/ab-tests', to: 'ab_tests#index', as: 'ab_tests'
-      get '/articles/:article_id/ab-tests/:id', to: 'ab_tests#show', as: 'ab_test'
+      get '/editors-dashboard/articles/:article_id/ab-tests', to: 'ab_tests#index', as: 'ab_tests'
+      get '/editors-dashboard/articles/:article_id/ab-tests/:id', to: 'ab_tests#show', as: 'ab_test'
 
-      get '/articles/:article_id/ab-tests/:ab_test_id/variations', to: 'variations#index', as: 'variations'
-      get '/articles/:article_id/ab-tests/:ab_test_id/variations/control-variation', to: 'variations#show_control_variation', as: 'control_variation'
-      get '/articles/:article_id/ab-tests/:ab_test_id/variations/test-variation', to: 'variations#show_test_variation', as: 'test_variation'
+      get '/editors-dashboard/articles/:article_id/ab-tests/:ab_test_id/variations', to: 'variations#index', as: 'variations'
+      get '/editors-dashboard/articles/:article_id/ab-tests/:ab_test_id/variations/control-variation', to: 'variations#show_control_variation', as: 'control_variation'
+      get '/editors-dashboard/articles/:article_id/ab-tests/:ab_test_id/variations/test-variation', to: 'variations#show_test_variation', as: 'test_variation'
 
       get '/articles/:id', to: 'articles#show'
 
