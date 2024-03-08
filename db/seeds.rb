@@ -67,11 +67,7 @@ puts '..........................'
 15.times do
   article = Article.new(
     title: Faker::Movies::HarryPotter.quote,
-    content: Faker::HTML.element(
-      tag: 'div',
-      content: 'This is a div with XSS attributes.',
-      attributes: { class: 'xss', onclick: "alert('XSS')" }
-    ),
+    content: Faker::HTML.paragraph,
     editor: Editor.all.sample,
     category: Category.all.sample
   )
@@ -94,11 +90,7 @@ puts '..........................'
 8.times do
   variation = Variation.new(
     category: Category.all.sample,
-    content: Faker::HTML.element(
-      tag: 'div',
-      content: 'This is a div with XSS attributes.',
-      attributes: { class: 'xss', onclick: "alert('XSS')" }
-    )
+    content: Faker::HTML.paragraph
   )
   variation.save!
 end
@@ -127,8 +119,15 @@ puts '..........................'
     control_variation: control_variation,
     test_variation: test_variation,
     start_date: Date.today + rand(1..6),
-    end_date: Date.today + rand(6..35)
+    end_date: Date.today + rand(6..35),
+    is_active: false
   )
+end
+
+all_articles = Article.all
+
+all_articles.each do |article|
+  article.ab_tests.first.update(is_active: true)
 end
 
 puts "#{AbTest.count} A/B tests created."

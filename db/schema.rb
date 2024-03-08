@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema[7.1].define(version: 2024_03_06_192827) do
+ActiveRecord::Schema[7.1].define(version: 2024_03_08_130256) do
   create_table "ab_tests", force: :cascade do |t|
     t.integer "article_id", null: false
     t.integer "editor_id", null: false
@@ -20,6 +20,7 @@ ActiveRecord::Schema[7.1].define(version: 2024_03_06_192827) do
     t.date "end_date"
     t.datetime "created_at", null: false
     t.datetime "updated_at", null: false
+    t.boolean "is_active", default: false
     t.index ["article_id"], name: "index_ab_tests_on_article_id"
     t.index ["control_variation_id"], name: "index_ab_tests_on_control_variation_id"
     t.index ["editor_id"], name: "index_ab_tests_on_editor_id"
