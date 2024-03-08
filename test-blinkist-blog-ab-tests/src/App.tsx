@@ -1,34 +1,21 @@
-import React, { useState, useEffect } from 'react';
-import { Articles } from './types/seeds.types';
+import React from 'react';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import "./global.css";
+import Magazine from './components/Magazine';
+import Article from './components/ArticleDetail';
+import LandingPage from './pages/LandingPage';
 
 const App = () => {
-  const [articles, setArticles] = useState<Articles | null>(null);
-
-  useEffect(() => {
-    const fetchArticles = async () => {
-      try {
-        const response = await fetch('http://localhost:3000/api/v1/articles');
-        if (!response.ok) {
-          throw new Error('Failed to fetch articles');
-        }
-        const data = await response.json();
-        setArticles(data);
-      } catch (error) {
-        console.error('Error fetching articles:', error);
-      }
-    };
-
-    fetchArticles();
-  }, []);
 
   return (
-    <div>
-      <h1>Articles</h1>
-      <ul>
-        {articles != null && articles.map(article => (
-          <li key={article.id}>{article.title}</li>
-        ))}
-      </ul>
+    <div className="container m-12">
+      <Router>
+        <Routes>
+          <Route path="/" Component={LandingPage}/>
+          <Route path="/magazine/articles" Component={Magazine} />
+          <Route path="/magazine/articles/:article_id" Component={Article} />
+        </Routes>
+      </Router>
     </div>
   );
 };
