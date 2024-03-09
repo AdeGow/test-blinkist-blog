@@ -18,9 +18,6 @@ const Magazine = () => {
       const expirationDate = new Date();
       expirationDate.setTime(expirationDate.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 day in milliseconds
 
-      // // // Set the selectedVariation as empty when cookie is set
-      // document.cookie = `cookieSelectedVariation=null; expires=${expirationDate.toUTCString()}; path=/magazine`;
-
       // Set a cookie with a unique identifier
       const cookieName = `myCookie_${expirationDate.getTime()}`;
       document.cookie = `${cookieName}=myValue; expires=${expirationDate.toUTCString()}; path=/magazine`;
@@ -34,7 +31,6 @@ const Magazine = () => {
   return (
     <div>
       <ArticlesList />
-
       <button onClick={handleClearCookies}>Clear cookies</button>
     </div>
   );

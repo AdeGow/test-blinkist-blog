@@ -1,4 +1,5 @@
 export type Articles = Article[];
+export type AbTests = AbTest[];
 
 export type Category = {
   id: number;
