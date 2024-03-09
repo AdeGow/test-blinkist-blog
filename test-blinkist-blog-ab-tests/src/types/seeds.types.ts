@@ -23,3 +23,14 @@ export type Variation = {
   category: Category;
   content: string;
 }
+
+export type AbTest = {
+  id: number;
+  article: Article;
+  editor: Editor;
+  control_variation: Variation;
+  test_variation: Variation;
+  start_date: Date;
+  end_date: Date;
+  is_active: Boolean;
+}
