@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { useParams } from 'react-router-dom';
+import { useParams, Link } from 'react-router-dom';
 import { Article, AbTest, Variation } from '../types/seeds.types';
 import { trackPageview, trackEvent } from '../analytics-api';
 
@@ -32,17 +32,13 @@ const ArticleDetail = () => {
         if (abTestsData) {
           // Find the active A/B test
           const activeAbTest = abTestsData.find((abTest: AbTest) => abTest.is_active);
-          console.log("article id is:", article_id)
-          console.log("active ab test is:", activeAbTest)
           if (activeAbTest) {
             // Find the control_variation of the ActiveAbTest
-            console.log("active abtest id is:", activeAbTest.id)
             const controlVariationResponse = await fetch(`http://localhost:3000/api/v1/editors-dashboard/articles/${article_id}/ab-tests/${activeAbTest.id}/variations/control-variation`);
             if (!controlVariationResponse.ok) {
               throw new Error('Failed to fetch the control_variation for the active A/B tests');
             }
             const controlVariationData = await controlVariationResponse.json();
-            console.log("control variation DATA is:", controlVariationData)
             setControlVariation(controlVariationData);
 
             // Find the test_variation of the ActiveAbTest
@@ -51,7 +47,6 @@ const ArticleDetail = () => {
               throw new Error('Failed to fetch the test_variation for the active A/B tests');
             }
             const testVariationData = await testVariationResponse.json();
-            console.log("test variation DATA is:", testVariationData)
             setTestVariation(testVariationData);
           }
         }
@@ -63,28 +58,44 @@ const ArticleDetail = () => {
     fetchArticle();
   }, [article_id]);
 
-  useEffect(() => {
-    const cookieSelectedVariation = document.cookie.replace(/(?:(?:^|.*;\s*)cookieSelectedVariation\s*\=\s*([^;]*).*$)|^.*$/, "$1");
+  function getCookie(name: string): string | null {
+    const cookieValue = document.cookie.match(`(^|;)\\s*${name}\\s*=\\s*([^;]+)`);
+    console.log("from getCookie function, cookieValue is :", cookieValue)
+    return cookieValue ? cookieValue.pop() || null : null;
+  }
 
-    if (cookieSelectedVariation === "null") {
-      console.log("Cookie selectedVariation is null");
-      // If cookie is not set, randomly select a variation
-      const randomNumber = Math.floor(Math.random() * 10) / 10 + 0.1;
+  useEffect(() => {
+    const cookieNameWithArticleId = `cookieSelectedVariation_article_${article_id}`;
+
+    const cookieArticleValue = getCookie(cookieNameWithArticleId);
+    console.log("cookieArticleValue", cookieArticleValue)
+
+    if (!cookieArticleValue || cookieArticleValue === "null") {
+      // If the cookie is not set, and neither control nor test variations are available, do nothing
+
+      // If the cookie is not set, randomly select a variation
+      const randomNumber = Math.random();
       const randomSelectedVariation = randomNumber < 0.5 ? controlVariation : testVariation;
-      console.log("randomSelectedVariation is", randomSelectedVariation);
+
       // Set the selectedVariation in component state
       setSelectedVariation(randomSelectedVariation);
+
       // Store the selectedVariation in cookie
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + 1); // 1 day expiration
-      document.cookie = `cookieSelectedVariation=${JSON.stringify(randomSelectedVariation)}; expires=${expirationDate.toUTCString()}; path=/magazine`;
-    } else {
-      // Parse the string cookieSelectedVariation into a Variation object
-      const parsedVariation: Variation = JSON.parse(cookieSelectedVariation);
-      setSelectedVariation(parsedVariation);
-    }
-  }, [controlVariation, testVariation]);
+      document.cookie = `cookieSelectedVariation_article_${article_id}=${JSON.stringify(randomSelectedVariation)}; expires=${expirationDate.toUTCString()}; path=/magazine`;
 
+    } else if (cookieArticleValue && cookieArticleValue != null) {
+      // Parse the cookie value into a JSON object
+      const parsedCookieValue = JSON.parse(cookieArticleValue);
+      console.log("parsedCookieValue is", parsedCookieValue)
+
+      // Set the selectedVariation from the cookie
+      setSelectedVariation(parsedCookieValue);
+    } else {
+      return console.log("Could not set variation")
+    }
+  }, [controlVariation, testVariation, article_id]);
 
 
   if (!article) {
@@ -98,7 +109,13 @@ const ArticleDetail = () => {
 
   return (
     <div>
+      <div className="bg-white border border-slate-50 rounded-[20px] cursor-pointer w-36 h-12 flex shadow-md md:shadow-lg shadow-lg shadow-gray-200 duration-300 lg:hover:-translate-y-1 md:border-none items-center justify-center">
+        <Link to={`/magazine/articles`}>
+          Back to list
+        </Link>
+      </div>
       <div>
+        <p className="font-bold text-3xl my-10">{selectedVariation != null && selectedVariation.id}</p>
         <h1>{article.title}</h1>
         <p>{selectedVariation != null ? selectedVariation.content : article.content}</p>
       </div>

@@ -18,15 +18,13 @@ const Magazine = () => {
       const expirationDate = new Date();
       expirationDate.setTime(expirationDate.getTime() + (1 * 24 * 60 * 60 * 1000)); // 1 day in milliseconds
 
-      // Set the cookie with the specified expiration time and path
-      document.cookie = `cookieName=myValue; expires=${expirationDate.toUTCString()}; path=/magazine`;
-
-      // Set the selectedVariation as empty when cookie is set
-      document.cookie = `cookieSelectedVariation=null; expires=${expirationDate.toUTCString()}; path=/magazine`;
+      // // // Set the selectedVariation as empty when cookie is set
+      // document.cookie = `cookieSelectedVariation=null; expires=${expirationDate.toUTCString()}; path=/magazine`;
 
       // Set a cookie with a unique identifier
       const cookieName = `myCookie_${expirationDate.getTime()}`;
-      document.cookie = `${cookieName}=myValue; expires=${expirationDate.toUTCString()}; path=/`;
+      document.cookie = `${cookieName}=myValue; expires=${expirationDate.toUTCString()}; path=/magazine`;
+
 
       // Update state to indicate that the cookie has been set
       setCookieSet(true);
