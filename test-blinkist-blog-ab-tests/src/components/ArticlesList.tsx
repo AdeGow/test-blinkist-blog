@@ -27,22 +27,23 @@ const ArticlesList = () => {
   return (
     <div>
       {/* VISITORS MAGAZINE */}
-      <h1 className="text-4xl mb-12">Articles</h1>
       { path.startsWith('/magazine/articles') &&
         <div>
           <ul>
           {articles != null && articles.map(article => (
-            <div className="mb-8">
-              <div className="mb-4">
-                <p className ="font-bold">Article nº{article.id}</p>
-                <li key={article.id}>{article.title}</li>
+            <li key={article.id}>
+              <div className="mb-16">
+                <div className="mb-4">
+                  <h3 className ="mb-8 underline decoration-blue decoration-4 underline-offset-[15px]">Article nº{article.id}</h3>
+                  <h4 className ="mb-8">{article.title}</h4>
+                </div>
+                <div className="bg-blue rounded-sm text-white cursor-pointer w-40 h-12 flex md:border-none items-center justify-center hover:bg-prussian-blue">
+                  <Link to={`/magazine/articles/${article.id}`}>
+                    See the article
+                  </Link>
+                </div>
               </div>
-              <div className="bg-white border border-slate-50 rounded-[20px] cursor-pointer w-36 h-12 flex shadow-md md:shadow-lg shadow-lg shadow-gray-200 duration-300 lg:hover:-translate-y-1 md:border-none items-center justify-center">
-                <Link to={`/magazine/articles/${article.id}`}>
-                  See the article
-                </Link>
-              </div>
-            </div>
+            </li>
           ))}
           </ul>
         </div>
@@ -52,17 +53,19 @@ const ArticlesList = () => {
         <div>
           <ul>
           {articles != null && articles.map(article => (
-            <div className="mb-8">
-              <div className="mb-4">
-                <p className ="font-bold">Article nº{article.id}</p>
-                <li key={article.id}>{article.title}</li>
-              </div>
-              <div className="bg-white border border-slate-50 rounded-[20px] cursor-pointer w-36 h-12 flex shadow-md md:shadow-lg shadow-lg shadow-gray-200 duration-300 lg:hover:-translate-y-1 md:border-none items-center justify-center">
-                <Link to={`/editors-dashboard/articles/${article.id}`}>
+            <li key={article.id}>
+              <div className="mb-16">
+                <div className="mb-4">
+                  <h3 className ="mb-8 underline decoration-blue decoration-4 underline-offset-[15px]">Article nº{article.id}</h3>
+                  <h4 className ="mb-8">{article.title}</h4>
+                </div>
+                <div className="bg-blue rounded-sm text-white cursor-pointer w-40 h-12 flex md:border-none items-center justify-center hover:bg-prussian-blue">
+                <Link to={`/editors-dashboard/articles/${article.id}/ab-tests`}>
                   See the article
                 </Link>
+                </div>
               </div>
-            </div>
+            </li>
           ))}
           </ul>
         </div>

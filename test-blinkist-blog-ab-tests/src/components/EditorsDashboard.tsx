@@ -5,7 +5,7 @@ const EditorsDashboard = () => {
 
   return (
     <div>
-      <p>Hello from EditorsDashboard</p>
+      <h1>Blinkist <span className="text-blue">Content Editors Dashboard</span></h1>
       <div>
       <ArticlesList />
     </div>

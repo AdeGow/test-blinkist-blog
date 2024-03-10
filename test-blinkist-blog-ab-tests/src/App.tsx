@@ -6,6 +6,9 @@ import LandingPage from './pages/LandingPage';
 import ArticleDetail from './components/ArticleDetail';
 import EditorsDashboard from './components/EditorsDashboard';
 import ArticleAbTests from './components/ArticleAbTests';
+import AbTestDetail from './components/AbTestDetail';
+import AbTestAdd from './components/AbTestAdd';
+
 
 const App = () => {
 
@@ -17,7 +20,9 @@ const App = () => {
           <Route path="/magazine/articles" Component={Magazine} />
           <Route path="/magazine/articles/:article_id" Component={ArticleDetail} />
           <Route path="/editors-dashboard/articles" Component={EditorsDashboard} />
-          <Route path="/editors-dashboard/articles/:article_id" Component={ArticleAbTests} />
+          <Route path="/editors-dashboard/articles/:article_id/ab-tests" Component={ArticleAbTests} />
+          <Route path="/editors-dashboard/articles/:article_id/ab-tests/:ab_test_id" Component={AbTestDetail} />
+          <Route path="/editors-dashboard/articles/:article_id/ab-tests/new" Component={AbTestAdd} />
         </Routes>
       </Router>
     </div>

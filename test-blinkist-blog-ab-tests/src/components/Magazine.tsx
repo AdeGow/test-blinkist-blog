@@ -30,8 +30,9 @@ const Magazine = () => {
 
   return (
     <div>
+      <h1>Blinkist <span className="text-blue">Magazine</span></h1>
       <ArticlesList />
-      <button onClick={handleClearCookies}>Clear cookies</button>
+      <button className="bg-grey rounded-sm text-white cursor-pointer w-28 h-10 flex md:border-none items-center justify-center hover:bg-dark-grey text-sm" onClick={handleClearCookies}>Clear cookies</button>
     </div>
   );
 }

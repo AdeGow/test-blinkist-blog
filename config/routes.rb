@@ -16,8 +16,8 @@ Rails.application.routes.draw do
         end
       end
 
-      get '/articles/:article_id/ab-tests/new', to: 'ab_tests#new', as: 'new_ab_test'
-      post '/articles/:article_id/ab-tests', to: 'ab_tests#create'
+      # get '/articles/:article_id/ab-tests/new', to: 'ab_tests#new', as: 'new_ab_test'
+      post '/editors-dashboard/articles/:article_id/ab-tests', to: 'ab_tests#create'
 
       get '/editors-dashboard/articles/:article_id/ab-tests', to: 'ab_tests#index', as: 'ab_tests'
       get '/editors-dashboard/articles/:article_id/ab-tests/:id', to: 'ab_tests#show', as: 'ab_test'
@@ -27,6 +27,14 @@ Rails.application.routes.draw do
       get '/editors-dashboard/articles/:article_id/ab-tests/:ab_test_id/variations/test-variation', to: 'variations#show_test_variation', as: 'test_variation'
 
       get '/articles/:id', to: 'articles#show'
+
+      get '/categories', to: 'categories#index'
+
+      get '/editors', to: 'editors#index'
+
+      get '/ab-tests', to: 'ab_tests#index_all'
+
+      get '/variations', to: 'variations#index_all', as: 'all_variations'
 
     end
   end

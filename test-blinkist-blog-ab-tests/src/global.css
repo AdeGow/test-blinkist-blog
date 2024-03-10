@@ -1,3 +1,63 @@
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
+
+h1 {
+  font-family: "Roboto", sans-serif;
+  color: #042330;
+  font-weight: 400;
+  font-size: xx-large;
+  padding: 3rem;
+  margin-bottom: 3rem;
+  background-color:#F1F6F4;
+}
+
+h2 {
+  font-family: "Roboto", sans-serif;
+  color: #042330;
+  font-weight: 400;
+  font-size: xx-large;
+}
+
+h3 {
+  font-family: "Noto", serif;
+  color: #042330;
+  font-weight: 400;
+  font-size: xx-large;
+  font-style: italic;
+}
+
+h4 {
+  font-family: "Roboto", sans-serif;
+  color: #042330;
+  font-weight: 400;
+  font-size: x-large;
+}
+
+p {
+  font-family: "Roboto", sans-serif;
+  color: #042330;
+  font-weight: 300;
+  font-size: x-large;
+}
+
+@media (min-width: 1024px) {
+  p {
+    font-size: larger;
+  }
+}
+
+@media (max-width: 375px) {
+  p {
+    font-size: large;
+  }
+}
+
+.btn-primary-blue {
+  display: block;
+  clear: both;
+  width: auto;
+  max-width: 50%;
+  margin-right: auto;
+  margin-left: auto;
+}

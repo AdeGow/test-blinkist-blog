@@ -1,6 +1,11 @@
 class Api::V1::AbTestsController < ApplicationController
-  before_action :set_article
+  before_action :set_article, only: [:index, :show, :new, :create]
   before_action :set_ab_test, only: [:show]
+
+  def index_all
+    @all_ab_tests = AbTest.all
+    render json: @all_ab_tests
+  end
 
   def index
     @ab_tests = @article.ab_tests
@@ -14,18 +19,15 @@ class Api::V1::AbTestsController < ApplicationController
 
   def new
     @ab_test = AbTest.new
-    render json: { message: 'Hello from ab_tests#new action' }
   end
 
   def create
     @ab_test = AbTest.new(ab_test_params)
-    @ab_test.article_id = @article.id
-    render json: { message: 'Hello from ab_tests#create action' }
+
     if @ab_test.save
-      redirect_to ab_test_path(@ab_test), notice: 'Your A/B Test was successfully created !'
+      render json: @ab_test, status: :created
     else
-      flash.now[:alert] = 'Failed to create A/B Test. Please enter again the required information.'
-      render :new, status: :unprocessable_entity
+      render json: @ab_test.errors, status: :unprocessable_entity
     end
   end
 
@@ -41,11 +43,9 @@ class Api::V1::AbTestsController < ApplicationController
 
   def ab_test_params
     params.require(:ab_test).permit(
-      :editor_id,
-      :start_date,
-      :end_date,
-      control_variation_attributes: [:category_id, :content],
-      test_variation_attributes: [:category_id, :content]
+      :article_id, :editor_id, :start_date, :end_date, :is_active,
+      control_variation_attributes: [:category_id, :content, :_destroy],
+      test_variation_attributes: [:category_id, :content, :_destroy]
     )
   end
 end

@@ -84,6 +84,7 @@ const ArticleDetail = () => {
       const expirationDate = new Date();
       expirationDate.setDate(expirationDate.getDate() + 1); // 1 day expiration
       document.cookie = `cookieSelectedVariation_article_${article_id}=${JSON.stringify(randomSelectedVariation)}; expires=${expirationDate.toUTCString()}; path=/magazine`;
+      console.log("cookieSelectedValue is", randomSelectedVariation)
 
     } else if (cookieArticleValue && cookieArticleValue != null) {
       // Parse the cookie value into a JSON object
@@ -109,20 +110,18 @@ const ArticleDetail = () => {
 
   return (
     <div>
-      <div className="bg-white border border-slate-50 rounded-[20px] cursor-pointer w-36 h-12 flex shadow-md md:shadow-lg shadow-lg shadow-gray-200 duration-300 lg:hover:-translate-y-1 md:border-none items-center justify-center">
+      <div className="text-grey underline hover:text-dark-grey text-base cursor-pointer h-10 flex md:border-none items-center justify-left hover:">
         <Link to={`/magazine/articles`}>
-          Back to list
+          Back to the list of articles
         </Link>
       </div>
-      <div>
-        <p className="font-bold text-3xl my-10">{selectedVariation != null && selectedVariation.id}</p>
-        <h1>{article.title}</h1>
+      <div className="my-8">
+        <h3 className="text-4xl mb-12">{article.title}</h3>
         <p>{selectedVariation != null ? selectedVariation.content : article.content}</p>
       </div>
-
       <div>
         <p>Thanks a lot for reading the article!</p>
-        <button onClick={handleButtonClick}>SIGN UP for Blinkist</button>
+        <button className="my-8 bg-blue rounded-sm text-white cursor-pointer w-56 h-12 flex md:border-none items-center justify-center hover:bg-prussian-blue" onClick={handleButtonClick}>Start your free 7-day trial</button>
       </div>
     </div>
   );

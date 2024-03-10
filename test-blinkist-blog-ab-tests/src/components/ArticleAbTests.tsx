@@ -45,19 +45,31 @@ const ArticleAbTests = () => {
 
   return (
     <div>
-      {/* VISITORS MAGAZINE */}
-      <h1 className="text-4xl mb-12">Articles</h1>
+      <div className="text-grey underline hover:text-dark-grey text-base cursor-pointer h-10 flex md:border-none items-center justify-left hover:">
+        <Link to={`/editors-dashboard/articles`}>
+          Back to the list of articles
+        </Link>
+      </div>
+      <h1 className="text-4xl mb-12">List of all the <span className="text-blue">A/B Tests of Article nº{article_id}</span></h1>
+      <h3 className="text-4xl mb-12">Article title: {article.title}</h3>
       <div>
+        <div className="flex justify-end">
+          <div className="bg-green hover:bg-[#1CB965] cursor-pointer rounded-sm text-navy-blue cursor-pointer w-44 h-12 flex md:border-none items-center justify-center">
+            <Link to={`/editors-dashboard/articles/${article_id}/ab-tests/new`}>
+              Create new A/B Test
+            </Link>
+          </div>
+        </div>
         <ul>
         {abTests != null && abTests.map(abTest => (
           <li key={abTest.id}>
-            <div className="mb-8">
+            <div className="mb-16">
               <div className="mb-4">
-                <p className ="font-bold">A/B Test nº{abTest.id}</p>
-                <p>{abTest.is_active? "This A/B Test is currenlty active." : "Not active."}</p>
+                <h4 className ="mb-8 underline decoration-blue decoration-4 underline-offset-[15px]">A/B Test nº{abTest.id}</h4>
+                <p>{abTest.is_active? <p  className="text-green text-lg font-bold">ACTIVE</p> : <p className="text-grey text-lg font-bold">UNACTIVE</p>}</p>
               </div>
-              <div className="bg-white border border-slate-50 rounded-[20px] cursor-pointer w-36 h-12 flex shadow-md md:shadow-lg shadow-lg shadow-gray-200 duration-300 lg:hover:-translate-y-1 md:border-none items-center justify-center">
-                <Link to={`/magazine/abTests/${abTest.id}`}>
+              <div className="bg-blue rounded-sm text-white cursor-pointer w-40 h-12 flex md:border-none items-center justify-center">
+                <Link to={`/editors-dashboard/articles/${article_id}/ab-tests/${abTest.id}`}>
                   See the A/B Test
                 </Link>
               </div>
