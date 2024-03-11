@@ -125,27 +125,38 @@ const AbTestAdd = () => {
       const startDate = new Date(abTest.start_date);
       const endDate = new Date(abTest.end_date);
 
-      // Update abTest with the Date objects
-      const updatedAbTest = {
-        ...abTest,
-        start_date: startDate,
-        end_date: endDate
+      // Construct the payload object
+      const payload = {
+        ab_test: {
+          article_id: abTest.article_id,
+          editor_id: abTest.editor_id,
+          start_date: startDate.toISOString().split('T')[0],
+          end_date: endDate.toISOString().split('T')[0],
+          is_active: abTest.is_active,
+          control_variation_attributes: {
+            category_id: abTest.control_variation.category_id,
+            content: abTest.control_variation.content
+          },
+          test_variation_attributes: {
+            category_id: abTest.test_variation.category_id,
+            content: abTest.test_variation.content
+          }
+        }
       };
 
-      // Submit the form with abTest data
-      console.log(updatedAbTest);
-
+      // Submit the form with the payload data
       const response = await fetch(`http://localhost:3000/api/v1/editors-dashboard/articles/${article_id}/ab-tests`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify(abTest),
-    });
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(payload),
+      });
 
-    if (!response.ok) {
-      throw new Error('Failed to create A/B test');
-    }
+      if (!response.ok) {
+        throw new Error('Failed to create A/B test');
+      }
+
       // Display a success message
       alert('A/B Test created successfully!');
 

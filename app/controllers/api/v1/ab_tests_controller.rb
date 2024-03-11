@@ -22,12 +22,27 @@ class Api::V1::AbTestsController < ApplicationController
   end
 
   def create
-    @ab_test = AbTest.new(ab_test_params)
+    begin
+      ActiveRecord::Base.transaction do
+        # Create control variation
+        control_variation = Variation.create!(ab_test_variation_params[:control_variation_attributes])
 
-    if @ab_test.save
-      render json: @ab_test, status: :created
-    else
-      render json: @ab_test.errors, status: :unprocessable_entity
+        # Create test variation
+        test_variation = Variation.create!(ab_test_variation_params[:test_variation_attributes])
+
+        # Create ab_test and associate variations
+        @ab_test = @article.ab_tests.new(ab_test_params)
+        @ab_test.control_variation_id = control_variation.id
+        @ab_test.test_variation_id = test_variation.id
+
+        if @ab_test.save
+          render json: @ab_test, status: :created
+        else
+          render json: @ab_test.errors, status: :unprocessable_entity
+        end
+      end
+    rescue ActiveRecord::RecordInvalid => e
+      render json: { error: e.message }, status: :unprocessable_entity
     end
   end
 
@@ -42,10 +57,10 @@ class Api::V1::AbTestsController < ApplicationController
   end
 
   def ab_test_params
-    params.require(:ab_test).permit(
-      :article_id, :editor_id, :start_date, :end_date, :is_active,
-      control_variation_attributes: [:category_id, :content, :_destroy],
-      test_variation_attributes: [:category_id, :content, :_destroy]
-    )
+    params.require(:ab_test).permit(:editor_id, :start_date, :end_date, :is_active)
+  end
+
+  def ab_test_variation_params
+    params.require(:ab_test).permit(control_variation_attributes: [:category_id, :content], test_variation_attributes: [:category_id, :content])
   end
 end
