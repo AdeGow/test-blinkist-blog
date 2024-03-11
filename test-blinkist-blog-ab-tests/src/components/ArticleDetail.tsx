@@ -19,7 +19,7 @@ const ArticleDetail = () => {
         }
         const articleData = await response.json();
         setArticle(articleData);
-        trackPageview(`/magazine/articles/${article_id}`);
+        trackPageview(`/magazine/articles/${article_id}`, article_id);
 
         // Fetch A/B tests data for the article
         const abTestsResponse = await fetch(`http://localhost:3000/api/v1/editors-dashboard/articles/${article_id}/ab-tests`);
@@ -105,7 +105,7 @@ const ArticleDetail = () => {
 
   const handleButtonClick = () => {
     // Track event when button is clicked
-    trackEvent('Button Clicked', { article_id });
+    trackEvent('Sign Up Button Clicked', { article_id });
   };
 
   return (

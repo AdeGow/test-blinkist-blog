@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {} from 'react';
 import ArticlesList from './ArticlesList';
 
 const EditorsDashboard = () => {
@@ -7,8 +7,8 @@ const EditorsDashboard = () => {
     <div>
       <h1>Blinkist <span className="text-blue">Content Editors Dashboard</span></h1>
       <div>
-      <ArticlesList />
-    </div>
+        <ArticlesList />
+      </div>
     </div>
   );
 }
