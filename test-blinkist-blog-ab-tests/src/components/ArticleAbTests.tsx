@@ -10,11 +10,11 @@ const ArticleAbTests = () => {
   useEffect(() => {
     const fetchArticle = async () => {
       try {
-        const response = await fetch(`http://localhost:3000/api/v1/magazine/articles/${article_id}`);
-        if (!response.ok) {
+        const articleResponse = await fetch(`http://localhost:3000/api/v1/magazine/articles/${article_id}`);
+        if (!articleResponse.ok) {
           throw new Error('Failed to fetch article');
         }
-        const articleData = await response.json();
+        const articleData = await articleResponse.json();
         setArticle(articleData);
 
         // Fetch A/B tests data for the article

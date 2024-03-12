@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
-import { AbTest, Category, Editor, Variation } from '../types/seeds.types';
+import { AbTest, Category, Editor } from '../types/seeds.types';
 
 const AbTestAdd = () => {
   const { article_id } = useParams<{ article_id: string }>();
@@ -55,6 +55,8 @@ const AbTestAdd = () => {
     fetchEditors();
   }, []);
 
+
+    // Functions to update the aBTest variable with the selected input's value, including the inputs related to variations
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
   const { name, value } = e.target;
   setAbTest(prevState => ({
@@ -65,7 +67,6 @@ const AbTestAdd = () => {
 
   const handleEditorChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const editorId = parseInt(e.target.value);
-    console.log("editor id is:", editorId)
     setAbTest(prevState => ({
       ...prevState,
       editor_id: editorId
@@ -74,7 +75,6 @@ const AbTestAdd = () => {
 
   const handleControlCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const controlCategoryId = parseInt(e.target.value);
-    console.log("controlCategoryId is:", controlCategoryId)
       setAbTest(prevState => ({
         ...prevState,
         control_variation: {
@@ -86,7 +86,6 @@ const AbTestAdd = () => {
 
   const handleTestCategoryChange = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const testCategoryId = parseInt(e.target.value);
-    console.log("testCategoryId is:", testCategoryId)
       setAbTest(prevState => ({
         ...prevState,
         test_variation: {
@@ -167,83 +166,117 @@ const AbTestAdd = () => {
     }
   };
 
+  const htmlString = "&lt;p&gt;&lt;/p&gt;";
+
   return (
     <div>
-      <h2>Create A/B Test</h2>
-      <form onSubmit={handleSubmit}>
-        <p>A/B Test information:</p>
-        {/* Editor's name input field */}
-        <div>
-          <label htmlFor="editor">Content editor:</label>
-          <select id="editor" name="editor" onChange={(e) => handleEditorChange(e)}>
-            <option value="">Select a content editor</option>
-            {editors.map(editor => (
-              <option key={editor.id} value={editor.id}>{editor.name}</option>
-            ))}
-          </select>
-        </div>
+      <h1>Create a new A/B Test</h1>
+      {/* INSTRUCTIONS */}
+      <div className="mb-6">
+        <h3 className="mb-6">Instructions to create your new A/B Test.</h3>
+        <p>Here are guidelines to help you write the content for your control and test variations.</p>
+        <p>You will write the content as HTML tags to facilitate the integration of your A/B Test's variations inside the articles of the Blinkist Magazine</p>
+        <p className="mt-2">It is very simple, according to the type of content you want to display, you will use a specific HTML tag. When you know which tag you want to use, just open the tag, write your content following the guidelines below and close the tag.</p>
+      </div>
+      <ul className="mb-10">
+        <li className="pl-4 mb-4">
+          <p><span className="font-normal">✅ TITLE:</span> use the &lt;h4&gt;&lt;/h4&gt; tag for titles.</p>
+          <p>Example: &lt;h4&gt;This is a title example&lt;/h4&gt;</p>
+        </li>
+        <li className="pl-4 mb-4">
+          <p><span className="font-normal">✅ TEXT AND PARAGRAPHS:</span> use the &lt;p&gt; &lt;/p&gt; paragraph tag, placing your content inside the tags.</p>
+          <p>Example: &lt;p&gt;This is an example of how to include text. You can keep using the same paragraphs tags for the same text section. When the text section is finished, just close the "p" tag.&lt;/p&gt;</p>
+        </li>
+        <li className="pl-4 mb-4">
+          <p><span className="font-normal">✅ IMAGE: </span>use the &lt;img src="" alt="" /&gt; tag, specifying the source of the image and the alternative text.</p>
+          <p>Example: &lt;img src="img_example.jpg" alt="Image example" /&gt;</p>
+        </li>
+        <li className="pl-4 mb-4">
+          <p><span className="font-normal">✅ LINK:</span> use the &lt;a href=""&gt;&lt;/a&gt; tag, specifying the URL you want to redirect the visitor and inside the tags place the anchor text.</p>
+          <p>Example: &lt;a href="https://www.blinkist.com/"&gt;Visit Blinkist.&lt;/a&gt;</p>
+        </li>
+      </ul>
 
-        {/* Start Date input field */}
-        <div>
-          <label htmlFor="start_date">Start Date:</label>
-          <input type="date" id="start_date" name="start_date" onChange={handleChange} />
-        </div>
+      {/* FORM */}
+      <h3 className="mb-6">Create the A/B Test:</h3>
+      <div className="">
+        <form onSubmit={handleSubmit}>
+          <p className="mb-4">A/B Test information:</p>
+          {/* Editor's name input field */}
+          <div className="mb-3">
+            <label htmlFor="editor">Content editor:</label>
+            <select className="ml-3 w-2/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" id="editor" name="editor" onChange={(e) => handleEditorChange(e)}>
+              <option value="">Select a content editor</option>
+              {editors.map(editor => (
+                <option key={editor.id} value={editor.id}>{editor.name}</option>
+              ))}
+            </select>
+          </div>
 
-        {/* End Date input field */}
-        <div>
-          <label htmlFor="end_date">End Date:</label>
-          <input type="date" id="end_date" name="end_date" onChange={handleChange} />
-        </div>
+          {/* Start Date input field */}
+          <div className="mb-3">
+            <label htmlFor="start_date">Start Date:</label>
+            <input className="ml-3 w-2/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" type="date" id="start_date" name="start_date" onChange={handleChange} />
+          </div>
 
-        <p>CREATE THE CONTROL VARIATION:</p>
-        {/* Control Variation Category input field */}
-        <div>
-          <label htmlFor="control_variation_category">Control Variation Format Category:</label>
-          <select id="control_variation_category" name="control_variation_category" onChange={(e) => handleControlCategoryChange(e)}>
-            <option value="">Select a category</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
-          </select>
-        </div>
+          {/* End Date input field */}
+          <div className="mb-3">
+            <label htmlFor="end_date">End Date:</label>
+            <input className="ml-3 w-2/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" type="date" id="end_date" name="end_date" onChange={handleChange} />
+          </div>
 
-        {/* Control Variation Content input field */}
-        <div>
-          <label htmlFor="control_variation_content">Control Variation Content:</label>
-          <textarea
-            id="control_variation_content"
-            name="control_variation_content"
-            value={abTest.control_variation.content}
-            onChange={handleControlVariationContentChange}
-          />
-        </div>
+          <p className="mt-10 mb-6">Control variation information:</p>
+          {/* Control Variation Category input field */}
+          <div className="mb-3">
+            <label htmlFor="control_variation_category">Control Variation Format Category:</label>
+            <select className="ml-3 w-2/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" id="control_variation_category" name="control_variation_category" onChange={(e) => handleControlCategoryChange(e)}>
+              <option value="">Select a category</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))}
+            </select>
+          </div>
 
-        <p>CREATE THE TEST VARIATION:</p>
-        {/* Test Variation Category input field */}
-        <div>
-          <label htmlFor="test_variation_category">Test Variation Format Category:</label>
-          <select id="test_variation_category" name="test_variation_category" onChange={(e) => handleTestCategoryChange(e)}>
-            <option value="">Select a category</option>
-            {categories.map(category => (
-              <option key={category.id} value={category.id}>{category.name}</option>
-            ))}
-          </select>
-        </div>
+          {/* Control Variation Content input field */}
+          <div className="mb-3">
+            <label className="block mb-2" htmlFor="control_variation_content">Control Variation Content:</label>
+            <textarea
+              id="control_variation_content"
+              name="control_variation_content"
+              value={abTest.control_variation.content}
+              onChange={handleControlVariationContentChange}
+              className="w-6/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
 
-        {/* Test Variation Content input field */}
-        <div>
-          <label htmlFor="test_variation_content">Test Variation Content:</label>
-          <textarea
-            id="test_variation_content"
-            name="test_variation_content"
-            value={abTest.test_variation.content}
-            onChange={handleTestVariationContentChange}
-          />
-        </div>
+          <p className="my-6">Test variation information:</p>
+          {/* Test Variation Category input field */}
+          <div className="mb-3">
+            <label htmlFor="test_variation_category">Test Variation Format Category:</label>
+            <select className="ml-3 w-2/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md" id="test_variation_category" name="test_variation_category" onChange={(e) => handleTestCategoryChange(e)}>
+              <option value="">Select a category</option>
+              {categories.map(category => (
+                <option key={category.id} value={category.id}>{category.name}</option>
+              ))}
+            </select>
+          </div>
 
-        {/* Submit button */}
-        <button type="submit">Create A/B Test</button>
-      </form>
+          {/* Test Variation Content input field */}
+          <div className="mb-3">
+            <label className="block mb-2" htmlFor="test_variation_content">Test Variation Content:</label>
+            <textarea
+              id="test_variation_content"
+              name="test_variation_content"
+              value={abTest.test_variation.content}
+              onChange={handleTestVariationContentChange}
+              className="w-6/12 rounded-md border border-[#e0e0e0] bg-white py-3 px-6 text-base font-medium text-[#6B7280] outline-none focus:border-[#6A64F1] focus:shadow-md"
+            />
+          </div>
+
+          {/* Submit button */}
+          <button className="bg-blue rounded-sm text-white cursor-pointer w-40 h-12 flex md:border-none items-center justify-center hover:bg-prussian-blue" type="submit">Create A/B Test</button>
+        </form>
+      </div>
     </div>
   );
 }

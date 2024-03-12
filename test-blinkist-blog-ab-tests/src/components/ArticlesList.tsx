@@ -26,7 +26,7 @@ const ArticlesList = () => {
 
   return (
     <div>
-      {/* VISITORS MAGAZINE */}
+      {/* FOR VISITORS MAGAZINE */}
       { path.startsWith('/magazine/articles') &&
         <div>
           <ul>
@@ -48,7 +48,7 @@ const ArticlesList = () => {
           </ul>
         </div>
       }
-      {/* CONTENT EDITORS DASHBOARD */}
+      {/* FOR CONTENT EDITORS DASHBOARD */}
       { path.startsWith('/editors-dashboard/articles') &&
         <div>
           <ul>

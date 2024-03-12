@@ -1,9 +1,17 @@
+// Function to get or generate a unique user ID
+const getUserId = () => {
+  let userId = localStorage.getItem('userId');
+  if (!userId) {
+    userId = Math.random().toString(36).substring(2); // Generate a random user ID
+    localStorage.setItem('userId', userId);
+  }
+  return userId;
+};
+
 // Function to track pageviews
 export const trackPageview = (pageUrl, articleId) => {
-  // Generate a unique identifier for each user (you can use any method to get the user ID)
   const userId = getUserId();
 
-  // Store pageview data in the cookie
   document.cookie = `pageview_${articleId}_${userId}=${JSON.stringify({ article: articleId, url: pageUrl, timestamp: new Date() })}; path=/magazine`;
 };
 
@@ -12,15 +20,12 @@ export const calculatePageviews = (articleId) => {
   // Get the pageview cookie data
   const pageviewCookie = document.cookie.match(`(^|;)\\s*pageview_${articleId}\\s*=\\s*([^;]+)`);
   if (!pageviewCookie) {
-    // If the pageview cookie is not found, return an empty object
     return {};
   }
 
-  // Parse the pageview cookie data
   const pageviewData = JSON.parse(decodeURIComponent(pageviewCookie[1]));
   console.log(pageviewData)
 
-  // Initialize an object to store pageview counts for each article URL
   const pageviewCounts = {};
 
   // Loop through the pageview data and count occurrences of each article URL
@@ -30,7 +35,6 @@ export const calculatePageviews = (articleId) => {
 
   return pageviewCounts;
 };
-
 
 // Function to track events
 export const trackEvent = (eventName, eventParams) => {
@@ -46,14 +50,4 @@ export const clearCookieData = () => {
     document.cookie = cookie.replace(/^ +/, "").replace(/=.*/, `=;expires=${new Date().toUTCString()};path=/magazine`);
   });
   console.log("Cookies all cleared!")
-};
-
-// Function to get or generate a unique user ID
-const getUserId = () => {
-  let userId = localStorage.getItem('userId');
-  if (!userId) {
-    userId = Math.random().toString(36).substring(2); // Generate a random user ID
-    localStorage.setItem('userId', userId);
-  }
-  return userId;
 };
