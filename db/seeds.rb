@@ -67,7 +67,7 @@ puts '..........................'
 15.times do
   article = Article.new(
     title: Faker::Movies::HarryPotter.quote,
-    content: Faker::HTML.paragraph,
+    content: Faker::HTML.sandwich(sentences: 5, repeat: 3),
     editor: Editor.all.sample,
     category: Category.all.sample
   )
@@ -90,7 +90,7 @@ puts '..........................'
 8.times do
   variation = Variation.new(
     category: Category.all.sample,
-    content: Faker::HTML.paragraph
+    content: Faker::HTML.sandwich(sentences: 5, repeat: 3)
   )
   variation.save!
 end
